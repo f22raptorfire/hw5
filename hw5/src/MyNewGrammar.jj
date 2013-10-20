@@ -22,4 +22,5 @@ TOKEN_MGR_DECLS : {
 TOKEN : {
     <HELLO : "hello">
   | <WORLD : "world">
+  |  <YOU : "you">
 }
