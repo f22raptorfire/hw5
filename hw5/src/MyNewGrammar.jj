@@ -16,7 +16,6 @@ TOKEN_MGR_DECLS : {
         System.out.println ("ExampleParser: Reading the file " + args[0] + " ..." );
         try {
 
-
          Reader r = new FileReader(args[0]);
          SimpleCharStream scs = new SimpleCharStream(r);
 		 ExampleParserTokenManager mgr = new ExampleParserTokenManager(scs);
