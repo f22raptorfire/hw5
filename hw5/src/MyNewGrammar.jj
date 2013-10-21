@@ -19,7 +19,7 @@ TOKEN_MGR_DECLS : {
          Reader r = new FileReader(args[0]);
          SimpleCharStream scs = new SimpleCharStream(r);
 		 ExampleParserTokenManager mgr = new ExampleParserTokenManager(scs);
-
+        
          while (mgr.getNextToken().kind != EOF) {}
         }
         catch(java.io.FileNotFoundException e) {
@@ -30,24 +30,282 @@ TOKEN_MGR_DECLS : {
   }
 }
 
-/* WHITE SPACE */
-SKIP :
+//skip whitespace
+SKIP:
 {
-  " " | "\t" | "\n" | "\r" | "\f"
+	" " | "\t" | "\n" | "\r" | "\f"
 }
 
-/* COMMENTS */
-SKIP :
+//skip single-line comments
+SKIP:
 {
-  <COMMENTS: "//"(~["\n","\r"])*<IN_COMMENT> >
-| <#IN_COMMENT: "\n" | "\r" | "\r\n" >
-| <COMMENTM: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+  <SINGLE_LINE_COMMENT : "//" (~["\n","\r"])* ("\r" | "\n" | "\r\n") >
+} 
+
+//skip multi-line comments
+MORE : {
+  "/*" : IN_MULTI_LINE_COMMENT
 }
 
+<IN_MULTI_LINE_COMMENT>
+MORE : {
+  < ~[] >
+}
 
-TOKEN : {
-    <HELLO : "hello">
-     { debugStream.println("hello token: " + matchedToken.image); }
-  | <WORLD : "world">
-   { debugStream.println("world token: " + matchedToken.image); }
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN : {
+  <MULTI_LINE_COMMENT: "*/"> : DEFAULT
+}
+
+//reserved word tokens
+TOKEN:
+{
+	<ABSTRACT: "abstract">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<DEFAULT_LABEL: "default">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<GOTO: "goto">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<PACKAGE: "package">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<SYNCHRONIZED: "synchronized">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }| 
+	<ASSERT: "assert">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<DO: "do">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<IF: "if">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<PRIVATE: "private">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<THIS: "this">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<BOOLEAN: "boolean">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<DOUBLE: "double">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<IMPLEMENTS: "implements">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<PROTECTED: "protected">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<THROW: "throw">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<BREAK: "break">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<ELSE: "else">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<IMPORT: "import">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<PUBLIC: "public">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<THROWS: "throws">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<BYTE: "byte">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<ENUM: "enum">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }| 
+	<INSTANCEOF: "instanceof">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<RETURN: "return">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<TRANSIENT: "transient">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }| 
+	<CASE: "case">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<EXTENDS: "extends">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<INT: "int">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<SHORT: "short">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<TRUE: "true">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<CATCH: "catch">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<FALSE: "false">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<INTERFACE: "interface">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<STATIC: "static">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<TRY: "try">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<CHAR: "char">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<FINAL: "final">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }| 
+	<LONG: "long">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<STRICTFP: "strictfp">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<VOID: "void">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<CLASS: "class">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<FINALLY: "finally">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<NATIVE: "native">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<SUPER: "super">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<VOLATILE: "volatile">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<CONST: "const">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<FLOAT: "float">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<NEW: "new">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<SWITCH: "switch">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<WHILE: "while">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<CONTINUE: "continue">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<FOR: "for">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }|
+	<NULL: "null">
+	{ debugStream.println("RESERVED WORD: " + matchedToken.image); }
+}
+
+//character token
+TOKEN:
+{
+  <CHAR_LITERAL: <SINGLE_QUOTE>(~[])<SINGLE_QUOTE>>
+  { debugStream.println("CHARACTER LITERAL: " + matchedToken.image); }
+}
+
+//string token
+TOKEN:
+{
+  <STRING_LITERAL: <DOUBLE_QUOTE>(~["\n", "\r"])*<DOUBLE_QUOTE>>
+  { debugStream.println("STRING LITERAL: " + matchedToken.image); }
+}
+
+//identifier token
+TOKEN:
+{
+  <IDENTIFIER: (["a"-"z","A"-"Z"] | "_")(["a"-"z","A"-"Z"] | ["0"-"9"] | "_")*>
+  { debugStream.println("IDENTIFIER: " + matchedToken.image); }
+}
+
+//integer number token
+TOKEN:
+{
+  <INTEGER_NUMBER: (["1"-"9"] (["0"-"9"])*)
+  | (["0"-"7"])+
+  | ("0" ("x" | "X") ((["0"-"9"])+ | (["A"-"F"] | ["a"-"f"]))+)>
+  { debugStream.println("INTEGER NUMBER: " + matchedToken.image); }
+}
+
+//real number token
+TOKEN:
+{
+  //TODO: fix real number grammar
+  <REAL_NUMBER: ((<INTEGER_NUMBER>)? (".") <INTEGER_NUMBER>)
+  | (<INTEGER_NUMBER> (".") (<INTEGER_NUMBER>)?)
+  | ((<INTEGER_NUMBER>)? (".") (<INTEGER_NUMBER>) (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))
+  | ((<INTEGER_NUMBER>) (".") (<INTEGER_NUMBER>)? (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))
+  | ((<INTEGER_NUMBER>) (".") (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))>
+
+  { debugStream.println("REAL NUMBER: " + matchedToken.image); }
+}
+
+//special symbol tokens
+TOKEN:
+{
+  <TILDE: "~">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <EXCLAMATION_MARK: "!">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <AT_SIGN: "@">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PERCENT: "%">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <CARET: "^">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <AMPERSAND: "&">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <STAR: "*">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <MINUS: "-">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PLUS: "+">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <ASSIGNMENT: "=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PIPE: "|">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <FORWARD_SLASH: "/">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <COLON: ":">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <SEMICOLON: ";">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <QUESTION_MARK: "?">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LESS: "<">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <GREATER: ">">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PERIOD: ".">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <COMMA: ",">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <SINGLE_QUOTE: "\'">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <DOUBLE_QUOTE: "\"">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LEFT_PAREN: "(">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <RIGHT_PAREN: ")">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LEFT_BRACKET: "[">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <RIGHT_BRACKET: "]">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LEFT_BRACE: "{">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <RIGHT_BRACE: "}">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PLUS_PLUS: "++">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <MINUS_MINUS: "--">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LESS_LESS: "<<">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <GREATER_GREATER: ">>">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LESS_EQUALS: "<=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <GREATER_EQUALS: ">=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PLUS_EQUALS: "+=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <MINUS_EQUALS: "-=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <STAR_EQUALS: "*=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <SLASH_EQUALS: "/=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <EQUALS_EQUALS: "==">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PIPE_EQUALS: "|=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PERCENT_EQUALS: "%=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <AMP_EQUALS: "&=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <CARET_EQUALS: "^=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <PIPE_PIPE: "||">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <AMP_AMP: "&&">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <EXCLAMATION_EQUALS: "!=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <LESS_LESS_EQUALS: "<<=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }|
+  <GREATER_GREATER_EQUALS: ">>=">
+  { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }
 }
