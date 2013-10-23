@@ -309,4 +309,4 @@ TOKEN:
   <GREATER_GREATER_EQUALS: ">>=">
   { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }
 }
-//test comment
+//test comment #2
