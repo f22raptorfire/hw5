@@ -193,7 +193,7 @@ TOKEN:
 TOKEN:
 {
   <INTEGER_NUMBER: (["1"-"9"] (["0"-"9"])*)
-  | ("0" ["0"-"7"]*)
+  | ("0" (["0"-"7"])*)
   | ("0" ("x" | "X") (["0"-"9"] | ["A"-"F"] | ["a"-"f"])+)>
   { debugStream.println("INTEGER NUMBER: " + matchedToken.image); }
 }
@@ -202,13 +202,16 @@ TOKEN:
 TOKEN:
 {
   //TODO: fix real number grammar
-  <REAL_NUMBER: ((<INTEGER_NUMBER>)? (".") <INTEGER_NUMBER>)
-  | (<INTEGER_NUMBER> (".") (<INTEGER_NUMBER>)?)
-  | ((<INTEGER_NUMBER>)? (".") (<INTEGER_NUMBER>) (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))
-  | ((<INTEGER_NUMBER>) (".") (<INTEGER_NUMBER>)? (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))
-  | ((<INTEGER_NUMBER>) (".") (["e", "E"]) (["+","-"])? (<INTEGER_NUMBER>))>
-
+  <REAL_NUMBER:
+    ((<WHOLE>)? (".") <FRACTION> (<EXPONENT>)?) // 1.2 | 1.2E+7 | .2 | .2E+7
+  | (<WHOLE> (((".") (<EXPONENT>)?) | (<EXPONENT>))) // 1. | 1.E+7 | 1E+7
+      >
   { debugStream.println("REAL NUMBER: " + matchedToken.image); }
+	| <#DIGITS: (["0"-"9"])+>
+	| <#WHOLE: <DIGITS>> 
+	| <#FRACTION: <DIGITS>>
+	| <#EXPONENT: (["e", "E"]) (["+","-"])? (<DIGITS>)>
+  
 }
 
 //special symbol tokens
@@ -309,4 +312,3 @@ TOKEN:
   <GREATER_GREATER_EQUALS: ">>=">
   { debugStream.println("SPECIAL SYMBOL: " + matchedToken.image); }
 }
-//test comment #3
