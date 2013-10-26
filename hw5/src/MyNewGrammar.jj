@@ -189,13 +189,25 @@ TOKEN:
   { debugStream.println("IDENTIFIER: " + matchedToken.image); }
 }
 
-//integer number token
+//decimal number token
 TOKEN:
 {
-  <INTEGER_NUMBER: (["1"-"9"] (["0"-"9"])*)
-  | ("0" (["0"-"7"])*)
-  | ("0" ("x" | "X") (["0"-"9"] | ["A"-"F"] | ["a"-"f"])+)>
-  { debugStream.println("INTEGER NUMBER: " + matchedToken.image); }
+	<DECIMAL_NUMBER: (["1"-"9"] (["0"-"9"])*)>
+	{ debugStream.println("DECIMAL INTEGER: " + matchedToken.image); }
+}
+
+//hexadecimal number token
+TOKEN:
+{
+	<HEXADECIMAL_NUMBER: ("0" ("x" | "X") (["0"-"9"] | ["A"-"F"] | ["a"-"f"])+)>
+	{ debugStream.println("HEXADECIMAL INTEGER: " + matchedToken.image); }
+}
+
+//octal number token
+TOKEN:
+{
+	<OCTAL_NUMBER: ("0" (["0"-"7"])*)>
+	{ debugStream.println("OCTAL INTEGER: " + matchedToken.image); }
 }
 
 //real number token
